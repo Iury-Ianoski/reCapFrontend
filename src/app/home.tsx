@@ -12,11 +12,12 @@ export default function Index() {
         <View style={styles.container}>
           <Generos/>
           <View style={styles.cardsList}>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
+            <Card modo='perfil' spoiler={true}/>
+            <Card modo='timeline' spoiler={false}/>
+            <Card modo='timeline' spoiler={true}/>
+            <Card modo='timeline' spoiler={false}/>
+            <Card modo='timeline' spoiler={false}/>
+            <Card modo='timeline' spoiler={true}/>
           </View>
         </View>
       </ScrollView>

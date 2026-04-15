@@ -13,11 +13,12 @@ export function Input({ ...rest }: TextInputProps) {
 const styles = StyleSheet.create({
   input: {
     width: "100%",
-    height: 45,
+    minHeight: 45,
     borderWidth: 1,
     borderColor: '#DEE2E6',
     borderRadius: 6,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     backgroundColor: '#FFF',
     color: "#343A40",
     fontSize: 16
