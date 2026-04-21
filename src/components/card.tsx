@@ -1,16 +1,18 @@
 import { Badge } from '@/components/badge';
 import { Button } from '@/components/button';
 import { ProgressBar } from '@/components/progressBar';
+import type { Review } from '@/data/review';
 import { FontAwesome } from "@expo/vector-icons";
 import { useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 type Props = {
-  spoiler: boolean
-  modo: 'timeline' | 'perfil'
+  spoiler: boolean;
+  modo: 'timeline' | 'perfil';
+  review: Review;
 }
 
-export function Card({ modo, spoiler }: Props) {
+export function Card({ modo, spoiler, review }: Props) {
   const [liberado, setLiberado] = useState(!spoiler)
 
   return (
@@ -21,20 +23,24 @@ export function Card({ modo, spoiler }: Props) {
       />
       <View style={{ flex: 1 }}>
         <View style={styles.cardTop}>
-          <Text style={styles.bookName}>Diário de um Banana</Text>
-          <Badge text='Gênero'></Badge>
+          <Text style={styles.bookName}>{review.book.title}</Text>
+          {review.book.genres?.map((genre) => (
+            <Badge key={genre.id} text={genre.name} />
+          ))}
         </View>
-        <Text style={styles.bookChapter}>Cap: 1-2</Text>
+        <Text style={styles.bookChapter}>Cap: {review.initialChapter}{review.finalChapter && ' - ' + review.finalChapter}</Text>
         {liberado ? (
           <>
-            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookComment}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque non nobis error enim rem et dolorem adipisci ipsum pariatur ea beatae quos qui, aliquam hic repudiandae. Doloribus odio molestiae accusantium.</Text>
+            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookComment}>
+              {review.content}
+            </Text>
             {modo == 'timeline' ? (
               <View style={styles.cardBottom}>
                 <Image
                   source={require("@/assets/avatar.png")}
                   style={styles.pictureReader}
                 />
-                <Text style={styles.bookReader}>Fulano de Tal</Text>
+                <Text style={styles.bookReader}>{review.userId}</Text>
               </View>
             ) : (
               <ProgressBar percentual={20}/>
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   livro: {
-    backgroundColor: "#000000",
+    backgroundColor: "#eee",
     width: 100,
     height: 144,
     resizeMode: "contain",

@@ -1,7 +1,7 @@
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { FontAwesome } from "@expo/vector-icons";
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -12,12 +12,13 @@ export default function Index() {
   const [finalChapter, setFinalChapter] = useState('')
   const [recap, setRecap] = useState('')
   const [spoiler, setSpoiler] = useState<"sim" | "nao">("sim");
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Link href="/" style={styles.topButton}>
+      <TouchableOpacity onPress={() => router.back()} style={styles.topButton}>
         <FontAwesome name="chevron-left" size={18} color="#414141" />
-      </Link>
+      </TouchableOpacity>
       <Text style={styles.h1}>Recapitulação</Text>
       <View style={{ gap: 12 }}>
         <Text style={styles.title}>Título do livro</Text>
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
   topButton: {
     position: "absolute",
     top: 15,
-    left: 8,
+    left: 15,
     width: 40,
     textAlign: "center",
     zIndex: 10,
