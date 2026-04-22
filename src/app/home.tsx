@@ -1,6 +1,9 @@
 import { Card } from '@/components/Card';
+import { Card } from '@/components/card';
+import { Footer } from '@/components/footer';
 import { Generos } from '@/components/generos';
 import { Header } from '@/components/header';
+import { reviews } from '@/data/review';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
@@ -42,9 +45,18 @@ export default function Index() {
               );
             }}
           />
+            {reviews.map((review, index) => (
+              <Card
+                key={review.id}
+                modo='timeline'
+                spoiler={review.spoiler}
+                review={review}
+              />
+            ))}
           </View>
         </View>
       </ScrollView>
+      <Footer/>
     </>
   )
 }
@@ -53,8 +65,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f5f5f5",
     flex: 1,
-    padding: 18,
-    paddingTop: 80
+    paddingHorizontal: 18,
+    paddingVertical: 80,
   },
   cardsList: {
     gap: 10
