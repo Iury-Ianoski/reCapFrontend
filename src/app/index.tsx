@@ -3,12 +3,29 @@ import { Input } from '@/components/input'
 import { Link, useRouter } from 'expo-router'
 import { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-
+import { login } from '@services/modules/auth/auth.service';
+  
 export default function Index() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [erro, setErro] = useState('')
   const router = useRouter();
+
+    const handleLogin = async () => {
+    try {
+      setErro('');
+
+      const response = await login(email, password);
+
+      console.log('Login OK:', response);
+
+      router.push("/home")
+    } catch (e) {
+      console.error(e);
+      setErro('Email ou senha inválidos');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -39,8 +56,7 @@ export default function Index() {
       <View style={{ marginTop: 35}}>
         <Button 
           onPress={() => {
-            console.log(email, password);
-            router.push("/home");
+              handleLogin()
           }} 
           label='Entrar'
         />

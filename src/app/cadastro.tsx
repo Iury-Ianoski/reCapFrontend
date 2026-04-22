@@ -1,7 +1,8 @@
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { FontAwesome } from "@expo/vector-icons";
-import { Link } from 'expo-router';
+import { register } from '@services/modules/auth/auth.service';
+import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -11,7 +12,24 @@ export default function Index() {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [erro, setErro] = useState('')
+  const router = useRouter();
 
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      setErro('As senhas não coincidem!');
+      return;
+    }
+    try {      
+      const response = await register(name, email, password);
+      console.log('Registro OK:', response);
+      setErro('Conta criada com sucesso!');
+      router.push("/home")
+    } catch (e) {
+      console.error(e);
+      setErro('Erro ao criar conta. Tente novamente.');
+    }
+  }
   return (
     <View style={styles.container}>
       <Link href="/" style={styles.topButton}>
@@ -49,7 +67,7 @@ export default function Index() {
         />
       </View>
       <View style={{ marginTop: 35}}>
-        <Button label='Criar conta' onPress={() => console.log(name, email, password, confirmPassword)}/>
+        <Button label='Criar conta' onPress={() => handleRegister()}/>
       </View>
     </View>
   )
