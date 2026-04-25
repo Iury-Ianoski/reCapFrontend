@@ -1,20 +1,17 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from 'expo-router';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { logout } from "@/services/modules/auth/auth.service";
 
-export function Header() {
+export function Header({username}: {username: string}) {
   return (
     <View style={styles.header}>
-      <Image
-        source={require("@/assets/avatar.png")}
-        style={styles.avatar}
-      />
       <View style={{ flex: 1 }}>
         <Text style={styles.ola}>Olá,</Text>
-        <Text style={styles.username}>Nome do usuário</Text>
+        <Text style={styles.username}>{username}</Text>
       </View>
-      <Link href="/" style={styles.searchButton}>
-        <FontAwesome name="search" size={20} color="#414141"/>
+      <Link href="/">
+        <FontAwesome name="sign-out" style={styles.exit} />
       </Link>
     </View>
   )
@@ -38,6 +35,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12
+  },
+  exit: {
+    paddingTop: 20,
+    fontSize: 24,
+    color: "#4D4D4D"
   },
   avatar: {
     width: 50,

@@ -1,55 +1,63 @@
-import { CardBook } from '@/components/card_livro';
+import { CardBook } from '@/components/Card_Book/index';
 import { Footer } from '@/components/footer';
 import { Generos } from '@/components/generos';
-import { books } from '@/data/books';
+import { CardBookProps } from '@/components/Card_Book/types';
+import { Header } from '@/components/header';
+import { loggedInUser } from '@services/modules/auth/auth.service';
+import { getBooks } from '@/services/modules/book/book.service';
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FlatList, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Book } from '@/types/book';
+import { mapBookToCard } from '@/mappers/book.mapper';
 
 export default function Index() {
 
   const router = useRouter();
   const [busca, setBusca] = useState('');
+  const [books, setBooks] = useState<Book[]>([]);
 
-  const filteredBooks = books.filter((book) =>
+  useEffect(() => {
+    getBooks().then(setBooks)
+  }, []);
+    
+  const filteredBooks = books.filter((book: { title: string; author: string; }) =>
     book.title.toLowerCase().includes(busca.toLowerCase()) ||
     book.author.toLowerCase().includes(busca.toLowerCase())
   );
   
   return (
     <>
+    
       <View style={styles.top}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.topButton}>
-          <FontAwesome name="chevron-left" size={18} color="#414141" />
-        </TouchableOpacity>
-        <View style={styles.boxSearch}>
-          <TextInput
-            style={styles.inputSearch}
-            placeholder="Busque por nome, autor..."
-            placeholderTextColor="#4D4D4D"
-            value={busca}
-            onChangeText={setBusca}
-          />
-          <FontAwesome name="search" size={18} color="#4D4D4D" />
-        </View>
         <Generos/>
+        <Header username={loggedInUser()?.name || 'Usuário'}/>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <FlatList
             data={filteredBooks}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             numColumns={2}
             columnWrapperStyle={{ gap: 10 }}
             contentContainerStyle={{ gap: 10 }}
-            renderItem={({ item }) => (
-              <View style={{ flex: 1 }}>
-                <TouchableOpacity onPress={() => router.push(`/livro?id=${item.id}`)} activeOpacity={0.9}>
-                  <CardBook book={item} />
+            renderItem={({ item }) => {
+              const card = mapBookToCard(item);
+              return (
+                <View style={{ flex: 1 }}>
+                  <TouchableOpacity onPress={() => router.push(`/livro?id=${item.id}`)} activeOpacity={0.9}>
+                    <CardBook 
+                    id={card.id}
+                    title={card.title}
+                    author={card.author}
+                    coverImageUrl={card.coverImageUrl}
+                    genres={item.genres}
+                   />
                 </TouchableOpacity>
               </View>
-            )}
+              )}
+            }
           />
         </View>
       </ScrollView>

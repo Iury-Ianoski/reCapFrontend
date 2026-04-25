@@ -13,3 +13,12 @@ export type Review = {
     name: string;
   };
 };
+
+export type CreateReviewDTO = {
+  content: string;
+  initialChapter: number;
+  finalChapter: number;
+  spoiler: boolean;
+  rating: number;
+  bookId: number;
+};

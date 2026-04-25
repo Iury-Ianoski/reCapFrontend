@@ -1,5 +1,5 @@
 import { api } from '@/services/api';
-import { Review } from '@/types/review';
+import { CreateReviewDTO, Review } from '@/types/review';
 
 export const getReviews = async (): Promise<Review[]> => {
   try {
@@ -30,7 +30,7 @@ export const getReviewById = async (id: number): Promise<Review> => {
   }
 };
 
-export const createReview = async (reviewData: Omit<Review, 'id'>): Promise<Review> => {
+export const createReview = async (reviewData: CreateReviewDTO): Promise<Review> => {
   try {
     const response = await api.post('/reviews', reviewData);
     return response.data;

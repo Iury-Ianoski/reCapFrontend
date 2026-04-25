@@ -1,7 +1,6 @@
 import { Badge } from '@/components/badge'
-import { Card } from '@/components/card'
-import { Footer } from '@/components/footer'
 import { books } from '@/data/books'
+import { Footer } from '@/components/footer';
 import { reviews } from '@/data/review'
 import { FontAwesome } from '@expo/vector-icons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
@@ -17,7 +16,7 @@ export default function Livro() {
     return (
       <View style={styles.emptyContainer}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <FontAwesome name="chevron-left" size={18} color="#414141" />
+          <FontAwesome name="chevron-left" size={18} color="#414141" /> 
         </TouchableOpacity>
         <Text style={styles.emptyText}>Livro não encontrado.</Text>
       </View>
@@ -53,7 +52,7 @@ export default function Livro() {
         </View>
         <View style={styles.content2}>
           <Text style={styles.bookTitle}>Recapitulações</Text>
-          <View style={styles.reviewList}>
+          {/* <View style={styles.reviewList}>
             {bookReviews.length ? (
               bookReviews.map((review) => (
                 <Card key={review.id} modo='timeline' spoiler={review.spoiler} review={review} />
@@ -61,7 +60,7 @@ export default function Livro() {
             ) : (
               <Text style={styles.noReviews}>Nenhuma avaliação disponível.</Text>
             )}
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       <Footer />

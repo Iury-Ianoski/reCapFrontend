@@ -2,16 +2,55 @@ import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { BookPicker } from '@/components/bookPicker';
+import { getBooks } from '@/services/modules/book/book.service';
+import { Book } from '@/types/book';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {CreateReviewDTO} from '@/types/review';
+import { createReview } from '@services/modules/reviews/review.service';
 
 export default function Index() {
 
-  const [bookTitle, setBookTitle] = useState('')
+  const [bookId, setBookId] = useState<number | null>(null);
   const [initialChapter, setInitialChapter] = useState('')
   const [finalChapter, setFinalChapter] = useState('')
   const [recap, setRecap] = useState('')
   const [spoiler, setSpoiler] = useState<"sim" | "nao">("sim");
+  const [books, setBooks] = useState<Book[]>([]);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const[alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const [CreateReviewDTO, setReview] = useState<CreateReviewDTO | null>(null);
+
+  useEffect(() => {
+    getBooks().then(setBooks)
+  }, []);
+
+  const handleRecap = async () => {
+    try {
+      console.log('Creating review with data:')
+      setReview({ 
+                content: recap,
+                initialChapter: parseInt(initialChapter),
+                finalChapter: parseInt(finalChapter),
+                spoiler: spoiler === "sim",
+                rating: 5,
+                bookId: bookId!
+              });
+
+      createReview(CreateReviewDTO!).then(() => {
+        router.back();
+      }).catch(() => {
+        alert('Erro ao criar review');
+      });
+
+      
+    }catch (error) {
+      alert('Erro ao criar review');
+    } 
+  };
+
   const router = useRouter();
 
   return (
@@ -21,23 +60,24 @@ export default function Index() {
       </TouchableOpacity>
       <Text style={styles.h1}>Recapitulação</Text>
       <View style={{ gap: 12 }}>
-        <Text style={styles.title}>Título do livro</Text>
-        <Input
-          value={bookTitle}
-          onChangeText={setBookTitle}
+        <Text style={styles.title}>Livro</Text>
+        <BookPicker 
+          books={books} 
+          onValueChange={(value) => {
+            setSelectedBook(value);
+            setBookId(value.id);
+            setInitialChapter('1');
+            setFinalChapter('');
+          }}
         />
-        <Text style={styles.title}>Capítulos</Text>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Input
-            value={initialChapter}
-            onChangeText={setInitialChapter}
-          />
-          <Text style={styles.title}>-</Text>
-          <Input
-            value={finalChapter}
-            onChangeText={setFinalChapter}
-          />
-        </View>
+        <Text style={styles.title}>Capítulo Inicial</Text>
+        <Input
+          onChangeText={setInitialChapter}
+        />
+        <Text style={styles.title}>Capítulo Final</Text>
+        <Input
+          onChangeText={setFinalChapter}
+        />
         <Text style={styles.title}>Comentário</Text>
         <Input
           value={recap}
@@ -63,7 +103,7 @@ export default function Index() {
         </View>
       </View>
       <View style={{ marginTop: 35 }}>
-        <Button label='Publicar' onPress={() => console.log(bookTitle, initialChapter, finalChapter, recap, spoiler)} />
+        <Button label='Publicar' onPress={() => handleRecap()} />
       </View>
     </View>
   )

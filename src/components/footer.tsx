@@ -6,18 +6,15 @@ export function Footer() {
   return (
     <View style={styles.footer}>
       <Link href="/home" style={styles.nav_item}>
-        <FontAwesome name="home" size={25} color="#414141"/>
-        Início
+        <FontAwesome name="home" size={40} color="#414141"/>
       </Link>
       <Link href="/recapitulacao" style={[styles.nav_item, { color: "#002370" }]}>
         <View style={styles.destaque}>
           <FontAwesome name="plus" size={25} color="#ffffff"/>
         </View>
-        Recapitular
       </Link>
       <Link href="/pesquisa" style={styles.nav_item}>
-        <FontAwesome name="book" size={25} color="#414141"/>
-        Livros
+        <FontAwesome name="book" size={40} color="#414141"/>
       </Link>
     </View>
   )

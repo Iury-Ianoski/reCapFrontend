@@ -9,7 +9,7 @@
       ],
       "@services/*": [
         "./src/services/*"
-      ],
+      ]
     }
   },
   "include": [

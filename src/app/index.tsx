@@ -3,7 +3,7 @@ import { Input } from '@/components/input'
 import { Link, useRouter } from 'expo-router'
 import { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { login } from '@services/modules/auth/auth.service';
+import { login  } from '@services/modules/auth/auth.service';
   
 export default function Index() {
 
@@ -20,10 +20,9 @@ export default function Index() {
 
       console.log('Login OK:', response);
 
-      router.push("/home")
+      router.push('/home')
     } catch (e) {
-      console.error(e);
-      setErro('Email ou senha inválidos');
+      alert('Email ou senha inválidos');
     }
   };
 
@@ -49,9 +48,6 @@ export default function Index() {
           onChangeText={setPassword}
           secureTextEntry={true}
         />
-        <TouchableOpacity activeOpacity={0.9}>
-          <Text style={styles.link_senha}>Esqueci minha senha</Text>
-        </TouchableOpacity>
       </View>
       <View style={{ marginTop: 35}}>
         <Button 
